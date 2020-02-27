@@ -7,7 +7,6 @@
 
 <script>
 import HelloWorld from '@/components/pages/HelloWorld'
-
 export default {
   name: 'Home',
   components: {
@@ -15,3 +14,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.home {
+  width: 100%;
+  max-width: 980px;
+  margin: auto;
+  padding-top: 64px;
+}
+</style>

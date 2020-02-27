@@ -1,11 +1,18 @@
 <template>
   <div>
-    <h1>hello</h1>
+    <atoms-title-text />
+    <div>
+      <organisms-add-area />
+    </div>
   </div>
 </template>
 
 <script>
+import OrganismsAddArea from '@/components/organisms/organismsAddArea.vue'
 export default {
+  components: {
+    OrganismsAddArea,
+  },
   data() {
     return {}
   },
@@ -14,6 +21,6 @@ export default {
 
 <style lang="scss" scoped>
 h1 {
-  color: red;
+  color: #707070;
 }
 </style>
