@@ -1,11 +1,35 @@
 <template>
   <div class="input_wrapper">
-    <input class="input" type="text" placeholder="何をしますか？" />
+    <input
+      class="input"
+      type="text"
+      @keydown="$emit('add-todo', state.inputValue)"
+      v-model="state.inputValue"
+      placeholder="何をしますか？"
+    />
+    {{ state.inputValue }}
   </div>
 </template>
 
-<script>
-export default {}
+<script lang="ts">
+import { defineComponent, reactive } from '@vue/composition-api'
+
+export default defineComponent({
+  data() {
+    return {
+      inputValue: null,
+    }
+  },
+  setup() {
+    const state = reactive<{ inputValue:  }>({
+      inputValue: 'hello',
+    })
+
+    return {
+      state,
+    }
+  },
+})
 </script>
 
 <style lang="scss" scoped>

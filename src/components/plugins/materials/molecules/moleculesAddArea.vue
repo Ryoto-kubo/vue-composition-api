@@ -1,7 +1,7 @@
 <template>
   <div class="add_container">
     <div class="input_container">
-      <atoms-input-area />
+      <atoms-input-area @add-todo="addTodo" />
     </div>
     <div class="button_container">
       <atoms-add-button />
@@ -9,8 +9,15 @@
   </div>
 </template>
 
-<script>
-export default {}
+<script lang="ts">
+import { defineComponent, reactive } from '@vue/composition-api'
+export default defineComponent({
+  methods: {
+    addTodo(value) {
+      console.log(value)
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>
