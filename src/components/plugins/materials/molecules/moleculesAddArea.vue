@@ -1,21 +1,28 @@
 <template>
   <div class="add_container">
     <div class="input_container">
-      <atoms-input-area @add-todo="addTodo" />
+      <atoms-input-area @input-text="inputText"/>
     </div>
     <div class="button_container">
-      <atoms-add-button />
+      <atoms-add-button @add-todo="addTodo"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, SetupContext } from '@vue/composition-api'
 export default defineComponent({
-  methods: {
-    addTodo(value) {
-      console.log(value)
-    },
+  setup(props, context: SetupContext){
+    const inputText = (value: string) => {
+      context.emit('input-text', value)
+    }
+    const addTodo = () => {
+      context.emit('add-todo')
+    }
+    return {
+      inputText,
+      addTodo
+    }
   },
 })
 </script>

@@ -3,30 +3,25 @@
     <input
       class="input"
       type="text"
-      @keydown="$emit('add-todo', state.inputValue)"
-      v-model="state.inputValue"
+      @keydown="inputText"
+      v-model="inputValue"
       placeholder="何をしますか？"
     />
-    {{ state.inputValue }}
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, ref, SetupContext } from '@vue/composition-api'
 
 export default defineComponent({
-  data() {
-    return {
-      inputValue: null,
+  setup(props, context: SetupContext) {
+    const inputValue = ref<string>('')
+    const inputText = () => {
+      context.emit('input-text', inputValue.value)      
     }
-  },
-  setup() {
-    const state = reactive<{ inputValue:  }>({
-      inputValue: 'hello',
-    })
-
     return {
-      state,
+      inputValue,
+      inputText,
     }
   },
 })

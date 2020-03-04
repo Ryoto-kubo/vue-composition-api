@@ -1,11 +1,22 @@
 <template>
   <div class="button_wrapper">
-    <button>追加する</button>
+    <button type="button" @click="addTodo">追加する</button>
   </div>
 </template>
 
-<script>
-export default {}
+<script lang="ts">
+import { defineComponent, SetupContext } from '@vue/composition-api'
+export default defineComponent({
+  setup(props, context: SetupContext) {
+    const addTodo = () => {
+      context.emit('add-todo')      
+    }
+
+    return {
+      addTodo
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
