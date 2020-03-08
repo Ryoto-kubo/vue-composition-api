@@ -12,10 +12,13 @@
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.upperfirst": "^4.3.6",
     "@vue/composition-api": "^0.4.0",
+    "axios": "^0.19.2",
+    "bluebird": "^3.7.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.upperfirst": "^4.3.1",
     "prettier-eslint": "^9.0.1",
     "require-context": "^1.1.0",
+    "types-axios": "0.0.8",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2"
