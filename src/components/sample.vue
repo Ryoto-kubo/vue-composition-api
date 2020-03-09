@@ -74,7 +74,7 @@
 // @ts-ignore
 import shortid from 'shortid'
 import {
-  difineComoponent,
+  defineComponent,
   ref,
   computed,
   watch,
@@ -84,8 +84,6 @@ import todoStorage from '../utils/storage'
 import TodoItemComponent from './TodoItem.vue'
 import { TodoItem, View, Colors } from '../index'
 
-// Colorsから色をランダムに取得
-// returnはstring
 function getRandomColor(): string {
   const len = Object.keys(Colors).length / 2 - 1
   const num = Math.floor(Math.random() * len) + 0
@@ -93,20 +91,128 @@ function getRandomColor(): string {
   return Colors[num]
 }
 
-// ここの引数viewは<View>の型を指定している。ジェネリクスと言う。
 function useTodoList(view: Ref<View>) {
-  // lacalStorageにあるtododataを取得
-  const todos = ref([...todoStorage.fetch])
-
-  // activeのTodoを抽出するためtodo.doneがfalseのものだけ抽出
-  const actievTodos = computed(() => {
+  const todos = ref([...todoStorage.fetch()])
+  const activeTodos = computed(() =>
     todos.value.filter((todo: TodoItem): boolean => !todo.done)
-  })
-  const completeTodos = computed(() => {
+  )
+  const completedTodos = computed(() =>
     todos.value.filter((todo: TodoItem): boolean => todo.done)
-  })
-}
-export default {}
-</script>
+  )
 
-<style></style>
+  const allCount = computed(() => todos.value.length)
+  const activeCount = computed(() => activeTodos.value.length)
+  const completedCount = computed(() => completedTodos.value.length)
+  const progress = computed(() => (completedCount.value / allCount.value) * 100)
+
+  const hasTodo = computed(() => todos.value.length > 0)
+
+  const currTodoList = computed(() => {
+    switch (view.value) {
+      case View.active:
+        return activeTodos.value
+      case View.completed:
+        return completedTodos.value
+      default:
+        return todos.value
+    }
+  })
+
+  watch(
+    todos,
+    newVal => {
+      todoStorage.save(newVal)
+    },
+    { deep: true }
+  )
+
+  return {
+    todos,
+    activeTodos,
+    completedTodos,
+    currTodoList,
+
+    allCount,
+    activeCount,
+    completedCount,
+    progress,
+
+    hasTodo,
+  }
+}
+
+function useUpdateTodo(todos: Ref<TodoItem[]>) {
+  const newTodoText = ref('')
+
+  return {
+    newTodoText,
+    addTodo(text: string): TodoItem | null {
+      if (!text) return null
+      const id = shortid.generate()
+
+      const todo: TodoItem = {
+        id,
+        text,
+        done: false,
+        color: getRandomColor(),
+      }
+
+      todos.value.push(todo)
+      newTodoText.value = ''
+
+      return todo
+    },
+    deleteTodo(todo: TodoItem) {
+      const index = todos.value.indexOf(todo)
+      todos.value.splice(index, 1)
+    },
+  }
+}
+
+export default defineComponent({
+  components: {
+    'todo-item': TodoItemComponent,
+  },
+
+  setup() {
+    const views = ref([View.all, View.active, View.completed])
+    const view = ref(View.all)
+
+    const {
+      todos,
+      activeTodos,
+      completedTodos,
+      currTodoList,
+
+      allCount,
+      activeCount,
+      completedCount,
+      progress,
+
+      hasTodo,
+    } = useTodoList(view)
+
+    const { newTodoText, addTodo, deleteTodo } = useUpdateTodo(todos)
+
+    return {
+      views,
+      view,
+
+      activeTodos,
+      completedTodos,
+      currTodoList,
+
+      allCount,
+      activeCount,
+      completedCount,
+      progress,
+
+      hasTodo,
+
+      newTodoText,
+      addTodo,
+      deleteTodo,
+    }
+  },
+})
+</script>
