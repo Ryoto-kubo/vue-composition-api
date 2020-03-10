@@ -105,6 +105,34 @@ function useTodoList(view: Ref<View>) {
   const completeTodos = computed(() => {
     todos.value.filter((todo: TodoItem): boolean => todo.done)
   })
+
+  const allCount = computed(() => todos.value.length)
+  const activeCount = computed(() => actievTodos.value.length)
+  const completedCount = computed(() => completeTodos.value.length)
+  const progress = computed(() => (completedCount.value / allCount.value) * 100)
+
+  // TodoItemがあればtrueでbottomのナビを表示させる
+  const hasTodo = computed(() => todos.value.length > 0)
+
+  // bottomのナビ操作で画面が変わった際にmenuに応じた、TodoItemを取得
+  const currTodoList = computed(() => {
+    switch (view.value) {
+      case View.active:
+        return actievTodos.value
+      case View.completed:
+        return completeTodos.value
+      default:
+        return todos.value
+    }
+  })
+
+  watch(
+    todos,
+    newVal => {
+      todoStorage.save(newVal)
+    },
+    { deep: true }
+  )
 }
 export default {}
 </script>
