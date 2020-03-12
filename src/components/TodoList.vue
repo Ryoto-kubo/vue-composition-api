@@ -138,7 +138,6 @@ function useTodoList(view: Ref<View>) {
     },
     { deep: true }
   )
-
   return {
     todos,
     activeTodos,
